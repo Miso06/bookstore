@@ -28,7 +28,10 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-a { text-decoration: none; color: inherit; }
+a {
+  text-decoration: none;
+  color: inherit;
+}
 
 header {
   background: rgba(255,250,247,.96);
@@ -206,66 +209,54 @@ header {
   font-weight: 700;
 }
 
-.book-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px 22px;
-}
-
-.book-card { min-width: 0; }
-
-.book-image {
-  background: #f1ece8;
-  height: 280px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  position: relative;
-  border-radius: 4px;
-}
-
-.book-image img {
+/* 도서 목록 표 디자인 */
+.book-table-wrap {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform .5s;
+  overflow-x: auto;
+  border: 1px solid #eadfe2;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 8px 25px rgba(80,60,65,.05);
 }
 
-.book-card:hover .book-image img {
-  transform: scale(1.04);
+.book-table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  text-align: center;
 }
 
-.book-info { padding: 16px 2px; }
-
-.book-tag {
-  color: #b67d94;
-  font-size: 10px;
-  letter-spacing: 1px;
+.book-table th {
+  padding: 20px 15px;
+  background: #e4f1eb;
+  color: #527565;
+  font-size: 13px;
   font-weight: 700;
+  border-bottom: 1px solid #dce9e2;
 }
 
-.book-title {
-  font-size: 15px;
+.book-table td {
+  padding: 19px 15px;
+  border-bottom: 1px solid #f1e9e9;
+  font-size: 13px;
+  color: #555;
+}
+
+.book-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.book-table tbody tr:hover {
+  background: #fff8fa;
+}
+
+.book-table .title-cell {
   font-weight: 700;
-  margin: 9px 0 6px;
-  line-height: 1.5;
+  color: #45413f;
 }
 
-.author {
-  font-size: 11px;
-  color: #999;
-}
-
-.price-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 15px;
-}
-
-.price {
-  font-size: 15px;
+.book-table .price-cell {
+  color: #bd8299;
   font-weight: 700;
 }
 
@@ -274,9 +265,10 @@ header {
   background: white;
   color: #638c7d;
   border-radius: 20px;
-  padding: 8px 13px;
-  font-size: 11px;
+  padding: 7px 12px;
+  font-size: 10px;
   cursor: pointer;
+  margin-left: 8px;
 }
 
 .add-button:hover {
@@ -378,7 +370,6 @@ footer {
 }
 
 @media(max-width:850px) {
-  .book-grid { grid-template-columns: repeat(2,1fr); }
   .hero-inner { padding: 35px; }
   .hero-visual { width: 180px; }
   .hero-visual img { width: 145px; height: 210px; }
@@ -392,11 +383,14 @@ footer {
   .hero-inner { padding: 30px 23px; min-height: 310px; }
   .hero-visual { display: none; }
   .section { padding: 0 17px; }
-  .section-heading { align-items: start; flex-direction: column; gap: 18px; }
+  .section-heading {
+    align-items: start;
+    flex-direction: column;
+    gap: 18px;
+  }
   .search { width: 100%; }
-  .book-grid { gap: 20px 12px; }
-  .book-image { height: 220px; }
-  .book-title { font-size: 13px; }
+  .book-table th,
+  .book-table td { padding: 14px 10px; }
 }
 </style>
 </head>
@@ -451,7 +445,7 @@ footer {
     </div>
 
     <input class="search" id="search"
-           placeholder="책 제목을 검색해 보세요"
+           placeholder="책 제목이나 저자를 검색하세요"
            oninput="renderBooks()">
   </div>
 
@@ -463,7 +457,19 @@ footer {
     <button class="category" onclick="setCategory('소설',this)">소설</button>
   </div>
 
-  <div class="book-grid" id="book-grid"></div>
+  <div class="book-table-wrap">
+    <table class="book-table">
+      <thead>
+        <tr>
+          <th>도서명</th>
+          <th>저자</th>
+          <th>출판사</th>
+          <th>가격</th>
+        </tr>
+      </thead>
+      <tbody id="book-table-body"></tbody>
+    </table>
+  </div>
 
 </section>
 
@@ -491,78 +497,80 @@ footer {
 
 <script>
 
+/* 도서 정보 */
 const books = [
   {
     title: "민트빛 오후의 서점",
     author: "서하윤",
+    publisher: "정보 준비 중",
     price: 16000,
     category: "에세이",
-    image: "mint-afternoon-bookstore.jpg",
-    tag: "BEST"
+    image: "mint-afternoon-bookstore.jpg"
   },
   {
     title: "분홍 노을이 머무는 문장들",
-    author: "이지은",
+    author: "서지안",
+    publisher: "정보 준비 중",
     price: 14500,
     category: "에세이",
-    image: "pink-sunset-sentences.jpg",
-    tag: "NEW"
+    image: "pink-sunset-sentences.jpg"
   },
   {
-    title: "작은 습관의 아침",
-    author: "저자 정보 준비 중",
+    title: "작은 습관이 만드는 단단한 아침",
+    author: "김나연",
+    publisher: "정보 준비 중",
     price: 13500,
     category: "라이프",
-    image: "small-habits-morning.jpg",
-    tag: "PICK"
+    image: "small-habits-morning.jpg"
   },
   {
-    title: "데이터로 읽는 시장",
-    author: "저자 정보 준비 중",
+    title: "데이터로 읽는 시장의 흐름",
+    author: "박도현",
+    publisher: "정보 준비 중",
     price: 18000,
     category: "경제",
-    image: "market-through-data.jpg",
-    tag: "ECONOMY"
+    image: "market-through-data.jpg"
   },
   {
-    title: "다정한 사람들의 생존법",
-    author: "저자 정보 준비 중",
+    title: "다정한 사람은 결국 살아남는다",
+    author: "정수빈",
+    publisher: "정보 준비 중",
     price: 15000,
     category: "에세이",
-    image: "kind-people-survive.jpg",
-    tag: "EDITOR'S PICK"
+    image: "kind-people-survive.jpg"
   },
   {
-    title: "은하수 우체국",
-    author: "저자 정보 준비 중",
+    title: "유리병 속의 은하수 우체국",
+    author: "최유진",
+    publisher: "정보 준비 중",
     price: 15500,
     category: "소설",
-    image: "galaxy-post-office.jpg",
-    tag: "STORY"
+    image: "galaxy-post-office.jpg"
   },
   {
-    title: "재무제표와 투자의 시작",
-    author: "저자 정보 준비 중",
+    title: "스무살의 첫 재무제표와 투자",
+    author: "이지우",
+    publisher: "정보 준비 중",
     price: 22000,
     category: "경제",
-    image: "first-financial-statements-investing.jpg",
-    tag: "ECONOMY"
+    image: "first-financial-statements-investing.jpg"
   },
   {
-    title: "처음 만나는 나의 노트",
-    author: "저자 정보 준비 중",
+    title: "기획자의 책상 위 첫번째 노트",
+    author: "한승우",
+    publisher: "정보 준비 중",
     price: 12000,
     category: "라이프",
-    image: "planner-first-notebook.jpg",
-    tag: "LIFESTYLE"
+    image: "planner-first-notebook.jpg"
   }
 ];
 
 let category = "전체";
 let cart = [];
 
+/* 도서 표 출력 */
 function renderBooks() {
-  const grid = document.getElementById("book-grid");
+  const tbody = document.getElementById("book-table-body");
   const keyword = document.getElementById("search").value.toLowerCase();
 
   const filtered = books.filter(book => {
@@ -576,44 +584,38 @@ function renderBooks() {
     return matchCategory && matchSearch;
   });
 
-  grid.innerHTML = "";
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4">검색 결과가 없습니다.</td>
+      </tr>
+    `;
+    return;
+  }
 
-  filtered.forEach(book => {
+  tbody.innerHTML = filtered.map(book => {
     const index = books.indexOf(book);
 
-    grid.innerHTML += `
-      <article class="book-card">
-        <div class="book-image">
-          <img
-            src="${book.image}"
-            alt="${book.title}"
-            loading="lazy"
-            onerror="this.style.display='none'; this.parentElement.style.background='#f1ece8';"
-          >
-        </div>
-
-        <div class="book-info">
-          <div class="book-tag">${book.tag}</div>
-          <div class="book-title">${book.title}</div>
-          <div class="author">${book.author}</div>
-
-          <div class="price-row">
-            <span class="price">${book.price.toLocaleString()}원</span>
-            <button class="add-button"
-              onclick="addCart(${index})">
-              + 담기
-            </button>
-          </div>
-        </div>
-      </article>
+    return `
+      <tr>
+        <td class="title-cell">
+          ${book.title}
+          <button class="add-button"
+            onclick="addCart(${index})">
+            + 담기
+          </button>
+        </td>
+        <td>${book.author}</td>
+        <td>${book.publisher}</td>
+        <td class="price-cell">
+          ${book.price.toLocaleString()}원
+        </td>
+      </tr>
     `;
-  });
-
-  if (filtered.length === 0) {
-    grid.innerHTML = '<p>검색 결과가 없습니다.</p>';
-  }
+  }).join("");
 }
 
+/* 카테고리 필터 */
 function setCategory(value, button) {
   category = value;
 
@@ -625,6 +627,7 @@ function setCategory(value, button) {
   renderBooks();
 }
 
+/* 장바구니 추가 */
 function addCart(index) {
   const book = books[index];
   const existing = cart.find(item => item.title === book.title);
@@ -639,6 +642,7 @@ function addCart(index) {
   alert("장바구니에 담았습니다!");
 }
 
+/* 장바구니 화면 갱신 */
 function updateCart() {
   const count = cart.reduce(
     (sum, item) => sum + item.quantity, 0
@@ -649,7 +653,8 @@ function updateCart() {
   const container = document.getElementById("cart-items");
 
   if (cart.length === 0) {
-    container.innerHTML = '<div class="empty">장바구니가 비어 있습니다.</div>';
+    container.innerHTML =
+      '<div class="empty">장바구니가 비어 있습니다.</div>';
   } else {
     container.innerHTML = cart.map((item, index) => `
       <div class="cart-item">
@@ -670,15 +675,18 @@ function updateCart() {
     "총 금액: " + total.toLocaleString() + "원";
 }
 
+/* 장바구니 상품 삭제 */
 function removeCart(index) {
   cart.splice(index, 1);
   updateCart();
 }
 
+/* 장바구니 열기 및 닫기 */
 function toggleCart() {
   document.getElementById("cart-panel").classList.toggle("show");
 }
 
+/* 주문하기 */
 function checkout() {
   if (cart.length === 0) {
     alert("장바구니가 비어 있습니다.");
@@ -688,141 +696,11 @@ function checkout() {
   alert("현재는 쇼핑몰 디자인 및 장바구니 시연 버전입니다. 실제 결제는 아직 연결되지 않았습니다.");
 }
 
+/* 처음 화면 실행 */
 renderBooks();
 updateCart();
 
 </script>
-<style>
-/* 상품 정보 표 디자인 */
-.book-grid {
-  display: block;
-}
 
-.book-table-wrap {
-  width: 100%;
-  overflow-x: auto;
-  border: 1px solid #eadfe2;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 8px 25px rgba(80, 60, 65, 0.05);
-}
-
-.book-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-  min-width: 600px;
-}
-
-.book-table th {
-  padding: 19px 15px;
-  background: #e4f1eb;
-  color: #527565;
-  font-size: 13px;
-  font-weight: 700;
-  border-bottom: 1px solid #dce9e2;
-}
-
-.book-table td {
-  padding: 19px 15px;
-  border-bottom: 1px solid #f1e9e9;
-  font-size: 13px;
-  color: #555;
-}
-
-.book-table tr:last-child td {
-  border-bottom: none;
-}
-
-.book-table tbody tr:hover {
-  background: #fff8fa;
-}
-
-.book-table .title-cell {
-  font-weight: 700;
-  color: #45413f;
-}
-
-.book-table .price-cell {
-  color: #bd8299;
-  font-weight: 700;
-}
-
-.book-table .add-button {
-  margin-left: 10px;
-  padding: 6px 11px;
-  font-size: 10px;
-}
-
-@media(max-width:600px) {
-  .book-table th,
-  .book-table td {
-    padding: 14px 10px;
-  }
-}
-</style>
-
-<script>
-/* 기존 책 목록을 네 가지 항목의 표로 변경 */
-renderBooks = function() {
-  const grid = document.getElementById("book-grid");
-  const keyword = document.getElementById("search").value.toLowerCase();
-
-  const filtered = books.filter(book => {
-    const matchCategory =
-      category === "전체" || book.category === category;
-
-    const matchSearch =
-      book.title.toLowerCase().includes(keyword) ||
-      book.author.toLowerCase().includes(keyword);
-
-    return matchCategory && matchSearch;
-  });
-
-  if (filtered.length === 0) {
-    grid.innerHTML = "<p>검색 결과가 없습니다.</p>";
-    return;
-  }
-
-  grid.innerHTML = `
-    <div class="book-table-wrap">
-      <table class="book-table">
-        <thead>
-          <tr>
-            <th>도서명</th>
-            <th>저자</th>
-            <th>출판사</th>
-            <th>가격</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${filtered.map(book => {
-            const index = books.indexOf(book);
-
-            return `
-              <tr>
-                <td class="title-cell">
-                  ${book.title}
-                  <button class="add-button"
-                    onclick="addCart(${index})">
-                    + 담기
-                  </button>
-                </td>
-                <td>${book.author}</td>
-                <td>${book.publisher || "정보 준비 중"}</td>
-                <td class="price-cell">
-                  ${book.price.toLocaleString()}원
-                </td>
-              </tr>
-            `;
-          }).join("")}
-        </tbody>
-      </table>
-    </div>
-  `;
-};
-
-renderBooks();
-</script>
 </body>
 </html>
