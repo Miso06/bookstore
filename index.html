@@ -1508,3 +1508,55 @@ updateUI();
 </script>
 </body>
 </html>
+<style>
+  .added-books { max-width: 1200px; margin: 64px auto; padding: 0 20px; font-family: inherit; color: #293b38; }
+  .added-books h2 { margin: 0 0 8px; font-size: clamp(24px, 3vw, 34px); }
+  .added-books .books-subtitle { margin: 0 0 28px; color: #84918d; font-size: 14px; }
+  .added-books-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; }
+  .added-book-card { min-width: 0; }
+  .added-book-cover { overflow: hidden; border-radius: 7px; background: #f3f0eb; box-shadow: 0 12px 26px rgba(40,55,50,.14); aspect-ratio: 3 / 4; }
+  .added-book-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .added-book-info { padding: 13px 2px 0; }
+  .added-book-info h3 { margin: 0 0 6px; font-size: 16px; line-height: 1.5; font-weight: 650; }
+  .added-book-info p { margin: 0; color: #89928e; font-size: 13px; }
+  @media (max-width: 760px) { .added-books-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; } }
+</style>
+
+<section class="added-books">
+  <h2>오늘의 추천 도서</h2>
+  <p class="books-subtitle">마음에 오래 남을 문장과 새로운 영감을 만나보세요.</p>
+  <div class="added-books-grid">
+    <article class="added-book-card">
+      <div class="added-book-cover"><img src="images/mint-afternoon-bookstore.jpg" alt="민트빛 오후의 서점 표지"></div>
+      <div class="added-book-info"><h3>민트빛 오후의 서점</h3><p>서하윤 지음</p></div>
+    </article>
+    <article class="added-book-card">
+      <div class="added-book-cover"><img src="images/pink-sunset-sentences.jpg" alt="분홍 노을이 머무는 문장들 표지"></div>
+      <div class="added-book-info"><h3>분홍 노을이 머무는 문장들</h3><p>이지안 지음</p></div>
+    </article>
+    <article class="added-book-card">
+      <div class="added-book-cover"><img src="images/market-through-data.jpg" alt="데이터로 읽는 시장의 흐름 표지"></div>
+      <div class="added-book-info"><h3>데이터로 읽는 시장의 흐름</h3><p>박도현 지음</p></div>
+    </article>
+    <article class="added-book-card">
+      <div class="added-book-cover"><img src="images/small-habits-morning.jpg" alt="작은 습관이 만드는 단단한 아침 표지"></div>
+      <div class="added-book-info"><h3>작은 습관이 만드는 단단한 아침</h3><p>김나연 지음</p></div>
+    </article>
+    <article class="added-book-card">
+      <div class="added-book-cover"><img src="images/galaxy-post-office.jpg" alt="유리병 속의 은하수 우체국 표지"></div>
+      <div class="added-book-info"><h3>유리병 속의 은하수 우체국</h3><p>최유진 지음</p></div>
+    </article>
+    <article class="added-book-card">
+      <div class="added-book-cover"><img src="images/kind-people-survive.jpg" alt="다정한 사람은 결국 살아남는다 표지"></div>
+      <div class="added-book-info"><h3>다정한 사람은 결국 살아남는다</h3><p>정수빈 지음</p></div>
+    </article>
+    <article class="added-book-card">
+      <div class="added-book-cover"><img src="images/planner-first-notebook.jpg" alt="기획자의 책상 위 첫 번째 노트 표지"></div>
+      <div class="added-book-info"><h3>기획자의 책상 위 첫 번째 노트</h3><p>한승우 지음 · ★ 4.8 · 16,200원</p></div>
+    </article>
+    <article class="added-book-card">
+      <div class="added-book-cover"><img src="images/first-financial-statements-investing.jpg" alt="스무 살의 첫 재무제표와 투자 표지"></div>
+      <div class="added-book-info"><h3>스무 살의 첫 재무제표와 투자</h3><p>경제·경영 · 재고 24권</p></div>
+    </article>
+  </div>
+</section>
