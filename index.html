@@ -692,6 +692,137 @@ renderBooks();
 updateCart();
 
 </script>
+<style>
+/* 상품 정보 표 디자인 */
+.book-grid {
+  display: block;
+}
 
+.book-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #eadfe2;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(80, 60, 65, 0.05);
+}
+
+.book-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  min-width: 600px;
+}
+
+.book-table th {
+  padding: 19px 15px;
+  background: #e4f1eb;
+  color: #527565;
+  font-size: 13px;
+  font-weight: 700;
+  border-bottom: 1px solid #dce9e2;
+}
+
+.book-table td {
+  padding: 19px 15px;
+  border-bottom: 1px solid #f1e9e9;
+  font-size: 13px;
+  color: #555;
+}
+
+.book-table tr:last-child td {
+  border-bottom: none;
+}
+
+.book-table tbody tr:hover {
+  background: #fff8fa;
+}
+
+.book-table .title-cell {
+  font-weight: 700;
+  color: #45413f;
+}
+
+.book-table .price-cell {
+  color: #bd8299;
+  font-weight: 700;
+}
+
+.book-table .add-button {
+  margin-left: 10px;
+  padding: 6px 11px;
+  font-size: 10px;
+}
+
+@media(max-width:600px) {
+  .book-table th,
+  .book-table td {
+    padding: 14px 10px;
+  }
+}
+</style>
+
+<script>
+/* 기존 책 목록을 네 가지 항목의 표로 변경 */
+renderBooks = function() {
+  const grid = document.getElementById("book-grid");
+  const keyword = document.getElementById("search").value.toLowerCase();
+
+  const filtered = books.filter(book => {
+    const matchCategory =
+      category === "전체" || book.category === category;
+
+    const matchSearch =
+      book.title.toLowerCase().includes(keyword) ||
+      book.author.toLowerCase().includes(keyword);
+
+    return matchCategory && matchSearch;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = "<p>검색 결과가 없습니다.</p>";
+    return;
+  }
+
+  grid.innerHTML = `
+    <div class="book-table-wrap">
+      <table class="book-table">
+        <thead>
+          <tr>
+            <th>도서명</th>
+            <th>저자</th>
+            <th>출판사</th>
+            <th>가격</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filtered.map(book => {
+            const index = books.indexOf(book);
+
+            return `
+              <tr>
+                <td class="title-cell">
+                  ${book.title}
+                  <button class="add-button"
+                    onclick="addCart(${index})">
+                    + 담기
+                  </button>
+                </td>
+                <td>${book.author}</td>
+                <td>${book.publisher || "정보 준비 중"}</td>
+                <td class="price-cell">
+                  ${book.price.toLocaleString()}원
+                </td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+};
+
+renderBooks();
+</script>
 </body>
 </html>
