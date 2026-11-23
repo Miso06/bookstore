@@ -1,1562 +1,697 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="책이 만드는 따뜻한 하루, 북클리 Bookly">
-<title>Bookly | 책이 만드는 따뜻한 하루</title>
+<title>오후의 책장 | Bookstore</title>
+
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap');
+
 :root {
-  --mint: #bfead9;
-  --mint-light: #eef9f4;
-  --mint-dark: #2f9674;
-  --mint-deep: #1e6f56;
-  --pink: #ffd6de;
-  --pink-light: #fff3f6;
-  --pink-dark: #e06d86;
-  --cream: #fffcfb;
-  --ink: #263832;
-  --muted: #76847e;
-  --line: #e8eeea;
-  --shadow: 0 12px 34px rgba(45, 95, 76, 0.08);
+  --pink: #f7dce5;
+  --pink-dark: #d98da9;
+  --mint: #d9eee6;
+  --mint-dark: #75aa98;
+  --cream: #fffaf7;
+  --ink: #343d3a;
+  --muted: #898e89;
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+
 body {
   margin: 0;
-  background: #fff;
+  background: var(--cream);
   color: var(--ink);
-  font-family: "Pretendard", "Noto Sans KR", system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
-}
-button, input, select { font: inherit; }
-button { cursor: pointer; border: 0; }
-a { color: inherit; text-decoration: none; }
-
-.wrap { width: min(1160px, calc(100% - 32px)); margin: auto; }
-
-/* 상단 띠배너 */
-.topline {
-  background: linear-gradient(90deg, #c7efdf, #ffe0e6);
-  text-align: center;
-  padding: 9px 12px;
-  font-size: 13px;
-  color: #3d5e51;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
-/* 헤더 */
+a { text-decoration: none; color: inherit; }
+
 header {
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(8px);
+  background: rgba(255,250,247,.96);
   position: sticky;
   top: 0;
-  z-index: 25;
-  border-bottom: 1px solid var(--line);
-}
-.head {
-  min-height: 74px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.logo {
-  font-size: 26px;
-  font-weight: 850;
-  letter-spacing: -1px;
-  color: var(--mint-deep);
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.search {
-  height: 42px;
-  max-width: 420px;
-  flex: 1;
-  margin-left: auto;
-  background: #f6faf7;
-  border: 1px solid #e4ede7;
-  border-radius: 30px;
-  display: flex;
-  padding: 0 16px;
-  align-items: center;
-}
-.search input {
-  border: 0;
-  outline: 0;
-  background: transparent;
-  width: 100%;
-  font-size: 14px;
-}
-.search button { background: none; font-size: 18px; color: #56816f; }
-
-.head-actions { display: flex; gap: 8px; align-items: center; }
-.head-actions button {
-  background: #fff;
-  color: #456156;
-  padding: 8px 13px;
-  border-radius: 22px;
-  font-size: 13px;
-  border: 1px solid var(--line);
-  white-space: nowrap;
-}
-.head-actions .signup {
-  background: linear-gradient(135deg, var(--mint), var(--pink));
-  color: #235844;
-  font-weight: 750;
-  border: 0;
-}
-.head-actions .cart-btn {
-  background: var(--pink-light);
-  border-color: #f8d2da;
-  color: #b54962;
-  font-weight: 700;
+  z-index: 10;
+  border-bottom: 1px solid #eee8e4;
 }
 
-.nav { border-top: 1px solid #f2f5f3; }
-.navin {
-  height: 44px;
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  font-size: 14px;
-  font-weight: 650;
-}
-.nav a:hover { color: var(--pink-dark); }
-
-/* 히어로 슬라이더 (6초 교차) */
-.hero {
-  height: 360px;
-  position: relative;
-  overflow: hidden;
-  background: #eff9f4;
-}
-.slides, .slide { position: absolute; inset: 0; }
-.slide {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.8s ease;
-  display: flex;
-  align-items: center;
-}
-.slide.active { opacity: 1; pointer-events: auto; }
-.slide-1 { background: linear-gradient(120deg, #dcf5ea 0%, #fff4f6 100%); }
-.slide-2 { background: linear-gradient(120deg, #ffe5eb 0%, #e5f7ef 100%); }
-.slide-3 { background: linear-gradient(120deg, #e1f6ed 0%, #ffecef 100%); }
-.slide-4 { background: linear-gradient(120deg, #fff0f3 0%, #d8f3e7 100%); }
-
-.hero-inner {
-  width: min(1160px, calc(100% - 32px));
+.nav {
+  max-width: 1200px;
   margin: auto;
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  padding: 22px 30px;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 20px;
-  padding: 0 36px;
 }
-.eyebrow {
-  font-size: 13px;
-  color: var(--pink-dark);
-  font-weight: 800;
-  letter-spacing: 0.8px;
-}
-.hero h1 {
-  font-size: clamp(26px, 3.8vw, 44px);
-  line-height: 1.25;
-  letter-spacing: -1.5px;
-  margin: 10px 0;
-  color: #243b33;
-}
-.hero p { color: #566860; line-height: 1.65; margin: 0 0 20px; font-size: 15px; }
-.pill {
-  border-radius: 30px;
-  background: linear-gradient(135deg, #ffcad5, #ffe3e9);
-  padding: 12px 24px;
-  font-weight: 750;
-  color: #6b2939;
-  box-shadow: 0 6px 16px rgba(224, 109, 134, 0.2);
-}
-.pill.mint-pill {
-  background: linear-gradient(135deg, #bfead9, #9fe0c6);
-  color: #1c5743;
-  box-shadow: 0 6px 16px rgba(47, 150, 116, 0.18);
-}
-.hero-art { display: flex; justify-content: center; align-items: center; }
-.hero-art svg { width: 100%; max-width: 280px; height: auto; filter: drop-shadow(0 14px 24px rgba(38,56,50,0.12)); }
 
-.arrow {
-  position: absolute;
-  z-index: 3;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  font-size: 22px;
-  color: #45685a;
-  box-shadow: var(--shadow);
-}
-.prev { left: 16px; }
-.next { right: 16px; }
-.dots {
-  position: absolute;
-  z-index: 4;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-}
-.dots button { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.8); padding: 0; }
-.dots button.on { background: var(--pink-dark); width: 22px; border-radius: 8px; }
-
-/* 혜택 바 */
-.perks {
-  margin: 24px auto 34px;
-  background: linear-gradient(100deg, #eaf8f1, #fff2f5);
-  border: 1px solid #f2e8ec;
-  border-radius: 18px;
-  padding: 16px 20px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-.perk { display: flex; align-items: center; justify-content: center; gap: 11px; font-size: 13px; }
-.perk b { display: block; font-size: 14px; color: #243b33; }
-.perk span span { color: var(--muted); font-size: 12px; }
-.perk i { font-style: normal; font-size: 24px; }
-
-/* 섹션 공통 */
-.section { margin: 40px auto; }
-.sect-head { display: flex; align-items: end; justify-content: space-between; margin-bottom: 18px; gap: 12px; }
-.sect-head h2 { font-size: 22px; margin: 0; letter-spacing: -0.7px; }
-.sect-head p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
-
-/* 카테고리 필터 */
-.categories { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
-.cat {
-  border: 1px solid #e9f0ec;
-  background: #f9fcfa;
-  border-radius: 16px;
-  padding: 15px 10px;
-  text-align: center;
-  transition: 0.2s;
-}
-.cat:hover, .cat.active {
-  transform: translateY(-3px);
-  background: linear-gradient(135deg, #e6f7ef, #fff0f3);
-  border-color: #f3c4cf;
-}
-.cat .emoji { font-size: 26px; display: block; margin-bottom: 6px; }
-.cat b { font-size: 13px; }
-
-/* 도서 카드 그리드 (8권) */
-.books { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.book {
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  overflow: hidden;
-  background: #fff;
-  transition: 0.25s;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-.book:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: #d7ebe1; }
-
-.cover-wrap {
-  padding: 18px 22px 12px;
-  background: linear-gradient(180deg, #f7fbf9 0%, #fff8fa 100%);
-  display: flex;
-  justify-content: center;
-  cursor: pointer;
-}
-.book-cover-svg {
-  width: 156px;
-  height: 214px;
-  border-radius: 4px 10px 10px 4px;
-  box-shadow: -4px 6px 14px rgba(34, 54, 46, 0.16), inset 3px 0 6px rgba(255,255,255,0.4);
-  transition: transform 0.25s;
-}
-.book:hover .book-cover-svg { transform: scale(1.03); }
-
-.badge {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  background: var(--pink-dark);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 800;
-  z-index: 2;
-}
-.badge.mint { background: var(--mint-dark); }
-
-.book-info { padding: 14px 16px 16px; flex: 1; display: flex; flex-direction: column; }
-.book-cat { font-size: 11px; color: var(--mint-dark); font-weight: 700; margin-bottom: 4px; }
-.book-info h3 { font-size: 15px; margin: 0 0 4px; cursor: pointer; line-height: 1.35; }
-.book-info h3:hover { color: var(--pink-dark); }
-.author { font-size: 12px; color: var(--muted); }
-.rating { font-size: 12px; color: #e8a838; margin: 8px 0; }
-.buyrow { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 6px; }
-.price { font-size: 16px; font-weight: 800; }
-.price del { font-size: 11px; color: #aab0ac; font-weight: 400; margin-left: 4px; }
-.add {
-  background: #e6f6ee;
-  color: var(--mint-deep);
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 19px;
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 27px;
   font-weight: 700;
-  transition: 0.2s;
+  letter-spacing: -1px;
 }
-.add:hover { background: var(--pink); color: #8c2f45; }
 
-/* 프로모션 배너 */
-.promo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.promo {
-  border-radius: 20px;
-  min-height: 165px;
-  padding: 26px 28px;
+.logo span { color: var(--pink-dark); }
+
+.nav-links {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 28px;
+  font-size: 13px;
+  color: #777;
 }
-.promo.mint { background: linear-gradient(115deg, #d6f4e6, #b7e9d3); }
-.promo.pink { background: linear-gradient(115deg, #ffe5eb, #ffcfd9); }
-.promo h3 { font-size: 21px; line-height: 1.4; margin: 6px 0 8px; }
-.promo p { font-size: 13px; margin: 0 0 14px; color: #54665e; }
-.promo .big { font-size: 46px; }
 
-/* 이벤트 & 회원/등급 박스 */
-.lower { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; }
-.event {
-  border-radius: 20px;
-  background: linear-gradient(115deg, #eaf8f0, #ffecef);
-  padding: 26px 28px;
+.nav-right {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 14px;
 }
-.event h3 { font-size: 22px; margin: 6px 0 8px; }
-.event p { font-size: 13px; color: #5c6e66; line-height: 1.6; margin: 0 0 16px; }
-.event .event-art { font-size: 56px; }
 
-.loginbox {
-  border: 1px solid #f4d3dc;
-  border-radius: 20px;
-  padding: 22px;
-  background: #fffcfd;
-}
-.loginbox h3 { margin: 0 0 6px; font-size: 18px; }
-.loginbox p { font-size: 13px; color: var(--muted); margin: 0 0 14px; line-height: 1.5; }
-.login-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.login-actions button {
-  padding: 9px 18px;
-  border-radius: 24px;
-  background: var(--mint-dark);
-  color: white;
+.cart-button {
+  background: var(--mint);
+  border: none;
+  border-radius: 30px;
+  padding: 11px 17px;
+  cursor: pointer;
   font-weight: 700;
-  font-size: 13px;
+  color: #456b5e;
 }
-.login-actions button.pink-btn {
-  background: var(--pink-light);
-  border: 1px solid #f2bcc8;
-  color: #b5455e;
+
+.hero {
+  max-width: 1200px;
+  margin: 35px auto 75px;
+  padding: 0 30px;
 }
-.pointline {
-  border-top: 1px solid var(--line);
-  margin-top: 15px;
-  padding-top: 12px;
+
+.hero-inner {
+  min-height: 390px;
+  border-radius: 8px;
+  background: linear-gradient(115deg, #f7e1e8 0%, #f9e9e8 48%, #dcefe6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 55px 75px;
+  overflow: hidden;
+}
+
+.hero-text { max-width: 520px; }
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #a06d80;
+  font-weight: 700;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(35px, 5vw, 57px);
+  line-height: 1.2;
+  margin: 22px 0;
+  font-weight: 600;
+}
+
+.hero p {
+  color: #777;
+  line-height: 1.9;
+  font-size: 14px;
+}
+
+.hero-visual {
+  width: 280px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(5deg);
+}
+
+.hero-visual img {
+  width: 195px;
+  height: 265px;
+  object-fit: cover;
+  box-shadow: 15px 18px 35px #8a777455;
+  border-radius: 3px;
+}
+
+.hero-btn {
+  display: inline-block;
+  margin-top: 22px;
+  padding: 14px 28px;
+  background: #fff;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.section {
+  max-width: 1200px;
+  margin: 0 auto 90px;
+  padding: 0 30px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 30px;
+}
+
+.section-heading h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 31px;
+  margin: 0 0 9px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0;
+}
+
+.search {
+  border: 1px solid #e8dfdc;
+  border-radius: 30px;
+  padding: 12px 18px;
+  background: white;
+  width: 230px;
+  outline: none;
+  font-family: inherit;
+}
+
+.categories {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.category {
+  border: 1px solid #e9e1dc;
+  background: white;
+  padding: 9px 19px;
+  border-radius: 30px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.category.active {
+  background: var(--mint);
+  border-color: var(--mint);
+  color: #507d6c;
+  font-weight: 700;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px 22px;
+}
+
+.book-card { min-width: 0; }
+
+.book-image {
+  background: #f1ece8;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  border-radius: 4px;
+}
+
+.book-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s;
+}
+
+.book-card:hover .book-image img {
+  transform: scale(1.04);
+}
+
+.book-info { padding: 16px 2px; }
+
+.book-tag {
+  color: #b67d94;
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.book-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 9px 0 6px;
+  line-height: 1.5;
+}
+
+.author {
+  font-size: 11px;
+  color: #999;
+}
+
+.price-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
+  margin-top: 15px;
 }
-.tier-badge {
-  display: inline-block;
-  padding: 3px 9px;
-  border-radius: 12px;
-  background: var(--pink);
-  color: #7c283b;
-  font-weight: 800;
+
+.price {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.add-button {
+  border: 1px solid #d9e9e1;
+  background: white;
+  color: #638c7d;
+  border-radius: 20px;
+  padding: 8px 13px;
   font-size: 11px;
-  margin-left: 6px;
+  cursor: pointer;
 }
 
-/* 리뷰 */
-.reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-.review { padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
-.review b { font-size: 13px; }
-.review p { font-size: 13px; color: #64736c; line-height: 1.6; margin: 6px 0 0; }
-.stars { color: #f2b638; font-size: 13px; margin-top: 3px; }
+.add-button:hover {
+  background: var(--mint);
+}
 
-/* 푸터 */
-footer { margin-top: 55px; background: linear-gradient(180deg, #eaf8f1, #fff2f5); padding: 36px 0 22px; }
-.foot { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 20px; }
-.foot h4 { margin: 0 0 10px; font-size: 14px; }
-.foot p, .foot a { display: block; font-size: 13px; color: #62736b; line-height: 1.9; margin: 0; }
-.copyright {
+.promo {
+  background: #e3f0e9;
+  padding: 55px 25px;
   text-align: center;
-  border-top: 1px solid #dcebe3;
-  margin-top: 24px;
-  padding-top: 16px;
-  color: #7d8d85;
-  font-size: 12px;
+  margin-bottom: 80px;
 }
 
-/* 모달 */
-.modal-back {
+.promo h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  margin: 0 0 12px;
+}
+
+.promo p {
+  font-size: 13px;
+  color: #71857b;
+  line-height: 1.8;
+}
+
+footer {
+  background: #f5e9e9;
+  text-align: center;
+  padding: 40px 20px;
+  color: #888;
+  font-size: 11px;
+  line-height: 2;
+}
+
+.footer-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 23px;
+  color: #bd8299;
+  margin-bottom: 12px;
+}
+
+.cart-panel {
   display: none;
   position: fixed;
-  inset: 0;
-  background: rgba(24, 38, 32, 0.55);
-  z-index: 50;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
-.modal-back.show { display: flex; }
-.modal {
-  width: min(480px, 100%);
-  max-height: 88vh;
+  z-index: 30;
+  right: 20px;
+  top: 85px;
+  width: 340px;
+  max-width: calc(100vw - 40px);
+  max-height: 75vh;
   overflow-y: auto;
-  background: #fff;
-  border-radius: 22px;
-  padding: 26px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-  position: relative;
-}
-.modal h2 { margin: 0 0 6px; font-size: 20px; }
-.modal p { color: #718078; font-size: 13px; margin: 0 0 14px; }
-.close {
-  position: absolute;
-  right: 16px;
-  top: 14px;
-  background: none;
-  font-size: 24px;
-  color: #718078;
-}
-.field { margin: 12px 0; }
-.field label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 5px; }
-.field input {
-  width: 100%;
-  padding: 11px 13px;
-  border: 1px solid #dce8df;
-  border-radius: 10px;
-  outline-color: var(--mint-dark);
-}
-.submit {
-  width: 100%;
-  background: linear-gradient(135deg, var(--mint-dark), #247d60);
-  color: #fff;
+  background: white;
+  padding: 25px;
   border-radius: 12px;
-  padding: 13px;
-  font-weight: 750;
-  margin-top: 10px;
+  box-shadow: 0 10px 45px #0002;
 }
+
+.cart-panel.show { display: block; }
+
+.cart-panel h3 { margin-top: 0; }
+
 .cart-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   gap: 10px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 13px;
+  padding: 13px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 12px;
 }
-.qty-box { display: flex; align-items: center; gap: 6px; }
-.qty-box button {
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
-  background: #f1f6f3;
+
+.cart-total {
+  font-weight: 700;
+  padding: 20px 0;
+}
+
+.close-cart {
+  float: right;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.checkout {
+  width: 100%;
+  border: 0;
+  padding: 14px;
+  background: var(--pink);
+  border-radius: 25px;
+  cursor: pointer;
   font-weight: 700;
 }
-.del-btn { background: none; color: #d6687f; font-size: 12px; margin-left: 4px; }
-.cart-total {
-  background: #f9fcfa;
-  border-radius: 12px;
-  padding: 14px;
-  margin-top: 14px;
+
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 25px 0;
   font-size: 13px;
 }
-.cart-total div { display: flex; justify-content: space-between; margin-bottom: 6px; }
-.cart-total .final { font-size: 16px; font-weight: 800; color: var(--mint-deep); margin-top: 8px; padding-top: 8px; border-top: 1px dashed #d5e4dc; }
 
-.order-card {
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 10px;
-  font-size: 12px;
-  background: #fcfefd;
+@media(max-width:850px) {
+  .book-grid { grid-template-columns: repeat(2,1fr); }
+  .hero-inner { padding: 35px; }
+  .hero-visual { width: 180px; }
+  .hero-visual img { width: 145px; height: 210px; }
+  .nav-links { display: none; }
 }
-.detail-box { display: flex; gap: 18px; align-items: flex-start; margin: 14px 0; }
 
-.toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translate(-50%, 20px);
-  opacity: 0;
-  pointer-events: none;
-  background: #23493b;
-  color: #fff;
-  padding: 12px 22px;
-  border-radius: 30px;
-  z-index: 80;
-  transition: 0.25s;
-  font-size: 13px;
-  white-space: nowrap;
-}
-.toast.show { opacity: 1; transform: translate(-50%, 0); }
-
-/* 반응형 (태블릿 & 375px 모바일 가로 넘침 방지) */
-@media (max-width: 900px) {
-  .books { grid-template-columns: repeat(2, 1fr); }
-  .perks { grid-template-columns: repeat(2, 1fr); }
-  .lower { grid-template-columns: 1fr; }
-}
-@media (max-width: 600px) {
-  .wrap { width: calc(100% - 24px); }
-  .topline { font-size: 11px; padding: 7px 8px; }
-  .head { flex-wrap: wrap; padding: 10px 0; gap: 8px; }
-  .logo { font-size: 21px; }
-  .head-actions { margin-left: auto; gap: 5px; }
-  .head-actions button { padding: 6px 9px; font-size: 11px; }
-  .search { order: 3; flex-basis: 100%; max-width: 100%; height: 38px; margin: 0; }
-  .navin { gap: 18px; overflow-x: auto; white-space: nowrap; font-size: 13px; }
-  .hero { height: auto; min-height: 330px; padding: 26px 0 38px; }
-  .hero-inner { grid-template-columns: 1fr; text-align: center; padding: 0 24px; }
-  .hero-art svg { max-width: 170px; }
-  .arrow { width: 32px; height: 32px; font-size: 18px; }
-  .prev { left: 6px; }
-  .next { right: 6px; }
-  .perks { grid-template-columns: 1fr 1fr; padding: 12px; gap: 10px; }
-  .perk { justify-content: flex-start; font-size: 12px; }
-  .categories { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .books { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .book-cover-svg { width: 128px; height: 176px; }
-  .promo-grid, .reviews { grid-template-columns: 1fr; }
-  .detail-box { flex-direction: column; align-items: center; text-align: center; }
-  .foot { grid-template-columns: 1fr 1fr; }
-  .foot > div:first-child { grid-column: 1 / -1; }
+@media(max-width:520px) {
+  .nav { padding: 17px; }
+  .logo { font-size: 22px; }
+  .hero { margin: 20px auto 50px; padding: 0 15px; }
+  .hero-inner { padding: 30px 23px; min-height: 310px; }
+  .hero-visual { display: none; }
+  .section { padding: 0 17px; }
+  .section-heading { align-items: start; flex-direction: column; gap: 18px; }
+  .search { width: 100%; }
+  .book-grid { gap: 20px 12px; }
+  .book-image { height: 220px; }
+  .book-title { font-size: 13px; }
 }
 </style>
 </head>
+
 <body>
 
-<div class="topline">🎁 신규 회원 가입 시 <b>3,000P</b> 즉시 지급! 등급별 최대 <b>7%</b> 포인트 적립</div>
-
 <header>
-  <div class="wrap head">
-    <a class="logo" href="#"><span>📖</span>Bookly</a>
-    <div class="search">
-      <input id="searchInput" placeholder="도서명, 저자, 카테고리를 검색해보세요">
-      <button onclick="searchBooks()" aria-label="검색">⌕</button>
-    </div>
-    <div class="head-actions" id="authHeaderBtns"></div>
-  </div>
   <div class="nav">
-    <nav class="wrap navin">
-      <a href="#categories">카테고리</a>
-      <a href="#bestseller">전체 도서</a>
-      <a href="#points">포인트 혜택</a>
-      <a href="#event">회원 라운지</a>
-      <a href="#footer">고객센터</a>
+    <a href="#" class="logo">afternoon<span>.</span></a>
+
+    <nav class="nav-links">
+      <a href="#">HOME</a>
+      <a href="#books">BOOKS</a>
+      <a href="#story">OUR STORY</a>
     </nav>
+
+    <div class="nav-right">
+      <button class="cart-button" onclick="toggleCart()">
+        BAG (<span id="cart-count">0</span>)
+      </button>
+    </div>
   </div>
 </header>
 
-<!-- 히어로 슬라이드 (사진 4장 6초 교차) -->
-<section class="hero" aria-label="추천 도서 배너">
-  <div class="slides">
-    <div class="slide slide-1 active">
-      <div class="hero-inner">
-        <div>
-          <div class="eyebrow">BOOKLY'S PICK · 오늘의 큐레이션</div>
-          <h1>민트빛 설렘과 함께<br>펼치는 오늘의 한 권</h1>
-          <p>일상에 다정한 온기를 더하는 엄선된 도서들을<br>북클리에서 가장 먼저 만나보세요.</p>
-          <button class="pill" onclick="document.querySelector('#bestseller').scrollIntoView()">베스트셀러 보기 →</button>
-        </div>
-        <div class="hero-art" id="heroArt0"></div>
-      </div>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="eyebrow">A LITTLE MOMENT WITH BOOKS</div>
+      <h1>Find your own<br>little story.</h1>
+      <p>
+        바쁜 하루의 끝에서 만나는 작은 여유.<br>
+        당신의 오후를 조금 더 특별하게 만들어 줄<br>
+        문장들을 이곳에서 만나보세요.
+      </p>
+      <a href="#books" class="hero-btn">책 구경하기 →</a>
     </div>
-    <div class="slide slide-2">
-      <div class="hero-inner">
-        <div>
-          <div class="eyebrow">WELCOME GIFT · 신규 회원 혜택</div>
-          <h1>가입만 해도 바로 쓰는<br>웰컴 포인트 3,000P</h1>
-          <p>첫 주문부터 현금처럼 바로 사용 가능한<br>따뜻한 독서 지원금을 드립니다.</p>
-          <button class="pill mint-pill" onclick="openModal('signup')">3,000P 받고 시작하기 →</button>
-        </div>
-        <div class="hero-art" id="heroArt1"></div>
-      </div>
+
+    <div class="hero-visual">
+      <img src="mint-afternoon-bookstore.jpg"
+           alt="민트빛 오후의 서점"
+           onerror="this.style.display='none'">
     </div>
-    <div class="slide slide-3">
-      <div class="hero-inner">
-        <div>
-          <div class="eyebrow">MEMBERSHIP TIER · 등급별 적립</div>
-          <h1>읽을수록 커지는 혜택<br>최대 7% 포인트 적립</h1>
-          <p>새싹(1%) · 책갈피(3%) · 책장(5%) · 도서관(7%)<br>나만의 서재를 채우고 등급을 올려보세요.</p>
-          <button class="pill" onclick="openMyPage()">내 등급 확인하기 →</button>
-        </div>
-        <div class="hero-art" id="heroArt2"></div>
-      </div>
-    </div>
-    <div class="slide slide-4">
-      <div class="hero-inner">
-        <div>
-          <div class="eyebrow">WEEKEND ESSAY · 감성 에세이</div>
-          <h1>마음에 작은 쉼표가<br>필요한 오후의 독서</h1>
-          <p>분홍빛 노을처럼 포근한 문장들이<br>지친 하루 끝을 다정하게 안아줍니다.</p>
-          <button class="pill mint-pill" onclick="filterCategory('에세이');document.querySelector('#bestseller').scrollIntoView()">에세이 모아보기 →</button>
-        </div>
-        <div class="hero-art" id="heroArt3"></div>
-      </div>
-    </div>
-  </div>
-  <button class="arrow prev" onclick="moveSlide(-1)" aria-label="이전 배너">‹</button>
-  <button class="arrow next" onclick="moveSlide(1)" aria-label="다음 배너">›</button>
-  <div class="dots">
-    <button class="on" onclick="setSlide(0)" aria-label="1번 배너"></button>
-    <button onclick="setSlide(1)" aria-label="2번 배너"></button>
-    <button onclick="setSlide(2)" aria-label="3번 배너"></button>
-    <button onclick="setSlide(3)" aria-label="4번 배너"></button>
   </div>
 </section>
 
-<div class="wrap">
-  <!-- 4대 핵심 혜택 -->
-  <div class="perks">
-    <div class="perk"><i>🎁</i><span><b>신규 가입 3,000P</b><span>가입 즉시 자동 적립</span></span></div>
-    <div class="perk"><i>🌸</i><span><b>4단계 등급 적립</b><span>1% · 3% · 5% · 7%</span></span></div>
-    <div class="perk"><i>🚚</i><span><b>전 도서 무료배송</b><span>한 권만 담아도 무료</span></span></div>
-    <div class="perk"><i>📖</i><span><b>표지 미리보기</b><span>도서 클릭 시 상세 정보</span></span></div>
+<section class="section" id="books">
+
+  <div class="section-heading">
+    <div>
+      <h2>Our Books</h2>
+      <p>당신의 책장에 머물고 싶은 이야기들</p>
+    </div>
+
+    <input class="search" id="search"
+           placeholder="책 제목을 검색해 보세요"
+           oninput="renderBooks()">
   </div>
 
-  <!-- 분류 필터 (4개 분류 + 전체) -->
-  <section class="section" id="categories">
-    <div class="sect-head">
-      <div>
-        <h2>📚 분야별 도서 찾기</h2>
-        <p>원하는 분류를 선택해 책을 골라보세요</p>
-      </div>
-    </div>
-    <div class="categories" id="categoryTabs">
-      <button class="cat active" onclick="filterCategory('전체', this)"><span class="emoji">✨</span><b>전체 도서</b></button>
-      <button class="cat" onclick="filterCategory('소설', this)"><span class="emoji">📖</span><b>소설</b></button>
-      <button class="cat" onclick="filterCategory('에세이', this)"><span class="emoji">🌷</span><b>에세이</b></button>
-      <button class="cat" onclick="filterCategory('자기계발', this)"><span class="emoji">🌱</span><b>자기계발</b></button>
-      <button class="cat" onclick="filterCategory('경제/경영', this)"><span class="emoji">📊</span><b>경제/경영</b></button>
-    </div>
-  </section>
-
-  <!-- 도서 목록 (예시 상품 8권) -->
-  <section class="section" id="bestseller">
-    <div class="sect-head">
-      <div>
-        <h2>🔥 북클리 추천 도서</h2>
-        <p>표지를 클릭하면 상세 소개와 재고를 확인할 수 있어요</p>
-      </div>
-      <span id="bookCountLabel" style="font-size:13px;color:var(--muted)">총 8권</span>
-    </div>
-    <div class="books" id="bookGrid"></div>
-  </section>
-
-  <!-- 포인트 프로모션 배너 -->
-  <section class="section promo-grid" id="points">
-    <div class="promo mint">
-      <div>
-        <div class="eyebrow" style="color:#1e6f56">WELCOME BONUS</div>
-        <h3>신규 회원 가입 시<br><span style="color:#1e6f56">3,000P 즉시 지급!</span></h3>
-        <p>가입 즉시 포인트가 적립되어 바로 사용 가능합니다.</p>
-        <button class="pill" onclick="openModal('signup')">지금 회원가입 →</button>
-      </div>
-      <div class="big">🎁</div>
-    </div>
-    <div class="promo pink">
-      <div>
-        <div class="eyebrow">MEMBERSHIP REWARD</div>
-        <h3>회원 등급 4단계에 따라<br><span style="color:#b83b58">1% · 3% · 5% · 7% 적립</span></h3>
-        <p>누적 구매금액에 따라 등급이 자동으로 승급됩니다.</p>
-        <button class="pill mint-pill" onclick="openMyPage()">등급별 기준 보기 →</button>
-      </div>
-      <div class="big">💎</div>
-    </div>
-  </section>
-
-  <!-- 이벤트 & 마이페이지 요약 라운지 -->
-  <section class="section lower" id="event">
-    <div class="event">
-      <div>
-        <div class="eyebrow">BOOKLY READING CLUB</div>
-        <h3>책과 함께하는<br>따뜻한 독서 기록</h3>
-        <p>장바구니에 책을 담고 체험 결제를 진행하면<br>주문 내역과 적립 포인트가 마이페이지에 기록됩니다.</p>
-        <button class="pill" onclick="openCart()">장바구니 열어보기 →</button>
-      </div>
-      <div class="event-art">🌷📚</div>
-    </div>
-    <div class="loginbox">
-      <h3>나의 독서 라운지 <span id="memberTierBadge" class="tier-badge">비회원</span></h3>
-      <p id="welcomeText">Bookly에 오신 것을 환영해요 :)<br>회원가입 시 3,000P를 바로 드립니다.</p>
-      <div class="login-actions" id="loungeBtns"></div>
-      <div class="pointline">
-        <span>🪙 보유 포인트 / 누적 구매</span>
-        <b id="pointBalance">0P / 0원</b>
-      </div>
-    </div>
-  </section>
-
-  <!-- 독자 리뷰 -->
-  <section class="section">
-    <div class="sect-head">
-      <div>
-        <h2>💬 독자님들의 생생한 리뷰</h2>
-        <p>북클리와 함께한 따뜻한 독서 후기</p>
-      </div>
-    </div>
-    <div class="reviews">
-      <article class="review">
-        <b>민트초코독서가</b>
-        <div class="stars">★★★★★</div>
-        <p>가입하자마자 3,000P를 줘서 첫 책부터 알뜰하게 샀어요! 책 표지 디자인도 하나같이 소장하고 싶게 예쁘네요.</p>
-      </article>
-      <article class="review">
-        <b>봄날의책갈피</b>
-        <div class="stars">★★★★★</div>
-        <p>책장 등급 달성해서 5%씩 포인트가 쌓이니까 다음 책 고르는 재미가 쏠쏠해요.</p>
-      </article>
-      <article class="review">
-        <b>데이터공부중</b>
-        <div class="stars">★★★★★</div>
-        <p>경제/경영 도서랑 에세이 구성이 깔끔해서 원하는 책을 바로 찾기 편합니다.</p>
-      </article>
-    </div>
-  </section>
-</div>
-
-<footer id="footer">
-  <div class="wrap">
-    <div class="foot">
-      <div>
-        <a class="logo" href="#">📖 Bookly</a>
-        <p>책이 만드는 따뜻한 하루,<br>민트와 핑크 감성의 온라인 서점 북클리</p>
-      </div>
-      <div>
-        <h4>고객센터</h4>
-        <a href="#footer">1:1 문의</a>
-        <a href="#footer">자주 묻는 질문</a>
-        <a href="#footer">배송 안내</a>
-      </div>
-      <div>
-        <h4>회원혜택</h4>
-        <a href="#points">신규가입 3,000P</a>
-        <a href="#points">등급별 적립 안내</a>
-        <a href="#event">마이페이지</a>
-      </div>
-      <div>
-        <h4>북클리 안내</h4>
-        <p>고객센터 1588-2026</p>
-        <p>평일 09:00 - 18:00</p>
-        <p>hello@bookly.kr</p>
-      </div>
-    </div>
-    <div class="copyright">© 2026 Bookly. All rights reserved.</div>
+  <div class="categories">
+    <button class="category active" onclick="setCategory('전체',this)">전체</button>
+    <button class="category" onclick="setCategory('에세이',this)">에세이</button>
+    <button class="category" onclick="setCategory('라이프',this)">라이프</button>
+    <button class="category" onclick="setCategory('경제',this)">경제</button>
+    <button class="category" onclick="setCategory('소설',this)">소설</button>
   </div>
+
+  <div class="book-grid" id="book-grid"></div>
+
+</section>
+
+<section class="promo" id="story">
+  <h2>Books make our days.</h2>
+  <p>
+    좋은 책 한 권이 하루를 바꾸기도 합니다.<br>
+    오후의 책장에서 당신만의 이야기를 찾아보세요.
+  </p>
+</section>
+
+<footer>
+  <div class="footer-logo">afternoon.</div>
+  <p>BOOKS, STORIES & LITTLE MOMENTS</p>
+  <p>© 2026 AFTERNOON BOOKSTORE. ALL RIGHTS RESERVED.</p>
 </footer>
 
-<div class="modal-back" id="modalBack" onclick="if(event.target===this)closeModal()">
-  <div class="modal" id="modalContent"></div>
+<div class="cart-panel" id="cart-panel">
+  <button class="close-cart" onclick="toggleCart()">×</button>
+  <h3>My Shopping Bag</h3>
+  <div id="cart-items"></div>
+  <div class="cart-total" id="cart-total">총 금액: 0원</div>
+  <button class="checkout" onclick="checkout()">주문하기</button>
 </div>
-<div class="toast" id="toast"></div>
 
 <script>
-/* =========================================================
-   1. 데이터베이스 연동용 초기 데이터 배열 (회원등급 / 도서 8종)
-   ========================================================= */
-const memberGrades = [
-  { level: 1, name: "새싹", minSpent: 0, rate: 0.01, label: "1%" },
-  { level: 2, name: "책갈피", minSpent: 30000, rate: 0.03, label: "3%" },
-  { level: 3, name: "책장", minSpent: 70000, rate: 0.05, label: "5%" },
-  { level: 4, name: "도서관", minSpent: 150000, rate: 0.07, label: "7%" }
-];
 
 const books = [
   {
-    id: 1,
-    name: "민트빛 오후의 서점",
-    author: "서하윤 지음",
-    category: "소설",
-    price: 14800,
-    oldPrice: 16500,
-    stock: 25,
-    rating: "4.9",
-    badge: "BEST 1",
-    theme: "mintCafe",
-    desc: "바닷가 작은 마을의 민트색 지붕 서점에서 펼쳐지는 네 계절의 다정한 인연과 치유의 이야기."
+    title: "민트빛 오후의 서점",
+    author: "서하윤",
+    price: 16000,
+    category: "에세이",
+    image: "mint-afternoon-bookstore.jpg",
+    tag: "BEST"
   },
   {
-    id: 2,
-    name: "분홍 노을이 머무는 문장들",
-    author: "이지안 지음",
+    title: "분홍 노을이 머무는 문장들",
+    author: "이지은",
+    price: 14500,
     category: "에세이",
+    image: "pink-sunset-sentences.jpg",
+    tag: "NEW"
+  },
+  {
+    title: "작은 습관의 아침",
+    author: "저자 정보 준비 중",
     price: 13500,
-    oldPrice: 15000,
-    stock: 30,
-    rating: "4.9",
-    badge: "BEST 2",
-    theme: "pinkSunset",
-    desc: "하루를 마치고 돌아오는 길, 지친 마음을 다독여주는 62편의 짧은 산문과 수채화 같은 기록."
+    category: "라이프",
+    image: "small-habits-morning.jpg",
+    tag: "PICK"
   },
   {
-    id: 3,
-    name: "데이터로 읽는 시장의 흐름",
-    author: "박도현 지음",
-    category: "경제/경영",
+    title: "데이터로 읽는 시장",
+    author: "저자 정보 준비 중",
     price: 18000,
-    oldPrice: 20000,
-    stock: 18,
-    rating: "4.8",
-    badge: "BEST 3",
-    theme: "dataChart",
-    desc: "복잡한 비즈니스 숫자와 고객 행동 데이터를 직관적인 인사이트로 바꾸는 실전 경영 입문서."
+    category: "경제",
+    image: "market-through-data.jpg",
+    tag: "ECONOMY"
   },
   {
-    id: 4,
-    name: "작은 습관이 만드는 단단한 아침",
-    author: "김나연 지음",
-    category: "자기계발",
-    price: 14000,
-    oldPrice: 15800,
-    stock: 22,
-    rating: "4.8",
-    badge: "추천",
-    theme: "morningLeaf",
-    desc: "거창한 목표 대신 매일 15분의 루틴으로 나만의 속도와 리듬을 되찾는 현실적인 성장 가이드."
-  },
-  {
-    id: 5,
-    name: "유리병 속의 은하수 우체국",
-    author: "최유진 지음",
-    category: "소설",
-    price: 15200,
-    oldPrice: 0,
-    stock: 15,
-    rating: "4.9",
-    badge: "신간",
-    theme: "starPost",
-    desc: "보내지 못한 편지들이 별빛이 되어 돌아오는 신비로운 야간 우체국에서 벌어지는 판타지 장편소설."
-  },
-  {
-    id: 6,
-    name: "다정한 사람은 결국 살아남는다",
-    author: "정수빈 지음",
+    title: "다정한 사람들의 생존법",
+    author: "저자 정보 준비 중",
+    price: 15000,
     category: "에세이",
-    price: 13800,
-    oldPrice: 15000,
-    stock: 28,
-    rating: "4.7",
-    badge: "",
-    theme: "warmFlower",
-    desc: "차갑고 빠른 세상 속에서도 나만의 온도와 선의를 잃지 않고 단단하게 살아가는 태도에 대하여."
+    image: "kind-people-survive.jpg",
+    tag: "EDITOR'S PICK"
   },
   {
-    id: 7,
-    name: "기획자의 책상 위 첫 번째 노트",
-    author: "한승우 지음",
-    category: "자기계발",
-    price: 16200,
-    oldPrice: 18000,
-    stock: 20,
-    rating: "4.8",
-    badge: "",
-    theme: "deskGrid",
-    desc: "막연한 아이디어를 구조화하고 설득력 있는 결과물로 완성하는 문제 해결 프레임워크."
-  },
-  {
-    id: 8,
-    name: "스무 살의 첫 재무제표와 투자",
-    author: "윤서영 지음",
-    category: "경제/경영",
+    title: "은하수 우체국",
+    author: "저자 정보 준비 중",
     price: 15500,
-    oldPrice: 17000,
-    stock: 24,
-    rating: "4.9",
-    badge: "인기",
-    theme: "coinGrow",
-    desc: "사회초년생과 대학생이 반드시 알아야 할 돈의 흐름, 손익 구조, 그리고 건강한 자산 관리법."
+    category: "소설",
+    image: "galaxy-post-office.jpg",
+    tag: "STORY"
+  },
+  {
+    title: "재무제표와 투자의 시작",
+    author: "저자 정보 준비 중",
+    price: 22000,
+    category: "경제",
+    image: "first-financial-statements-investing.jpg",
+    tag: "ECONOMY"
+  },
+  {
+    title: "처음 만나는 나의 노트",
+    author: "저자 정보 준비 중",
+    price: 12000,
+    category: "라이프",
+    image: "planner-first-notebook.jpg",
+    tag: "LIFESTYLE"
   }
 ];
 
-/* =========================================================
-   2. 고품질 책 표지 & 히어로 SVG 일러스트 생성기
-   ========================================================= */
-function createBookCoverSVG(book) {
-  const designs = {
-    mintCafe: `
-      <defs>
-        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#8fd9be"/>
-          <stop offset="100%" stop-color="#3c9d7e"/>
-        </linearGradient>
-      </defs>
-      <rect width="160" height="220" fill="url(#g1)"/>
-      <circle cx="122" cy="46" r="24" fill="#ffe6ec" opacity="0.85"/>
-      <rect x="26" y="118" width="108" height="72" rx="6" fill="#fffdf9"/>
-      <path d="M20 120 L80 92 L140 120 Z" fill="#ff9eb3"/>
-      <rect x="44" y="136" width="26" height="32" rx="3" fill="#bfead9"/>
-      <rect x="86" y="136" width="32" height="54" rx="3" fill="#ffd6de"/>
-      <circle cx="112" cy="164" r="2.5" fill="#b84a62"/>
-      <text x="80" y="42" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="700" letter-spacing="2">NOVEL</text>
-      <text x="80" y="64" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="800">민트빛 오후의</text>
-      <text x="80" y="82" text-anchor="middle" fill="#fff5f7" font-size="14" font-weight="800">서점</text>
-    `,
-    pinkSunset: `
-      <defs>
-        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#ffb8c8"/>
-          <stop offset="55%" stop-color="#ffe3d8"/>
-          <stop offset="100%" stop-color="#bfead9"/>
-        </linearGradient>
-      </defs>
-      <rect width="160" height="220" fill="url(#g2)"/>
-      <circle cx="80" cy="128" r="36" fill="#fff5f7" opacity="0.9"/>
-      <path d="M0 155 Q45 140 80 155 T160 155 L160 220 L0 220 Z" fill="#52ab8c" opacity="0.85"/>
-      <path d="M0 172 Q50 160 100 175 T160 170 L160 220 L0 220 Z" fill="#2f8568"/>
-      <rect x="18" y="18" width="124" height="184" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
-      <text x="80" y="44" text-anchor="middle" fill="#8f364b" font-size="8.5" font-weight="700" letter-spacing="2">ESSAY</text>
-      <text x="80" y="68" text-anchor="middle" fill="#592633" font-size="13.5" font-weight="800">분홍 노을이</text>
-      <text x="80" y="86" text-anchor="middle" fill="#592633" font-size="13.5" font-weight="800">머무는 문장들</text>
-    `,
-    dataChart: `
-      <defs>
-        <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#225747"/>
-          <stop offset="100%" stop-color="#14362c"/>
-        </linearGradient>
-      </defs>
-      <rect width="160" height="220" fill="url(#g3)"/>
-      <rect x="28" y="148" width="16" height="42" rx="3" fill="#8fd9be"/>
-      <rect x="54" y="128" width="16" height="62" rx="3" fill="#bfead9"/>
-      <rect x="80" y="112" width="16" height="78" rx="3" fill="#ffd6de"/>
-      <rect x="106" y="92" width="16" height="98" rx="3" fill="#ff9eb3"/>
-      <path d="M32 135 L62 115 L88 102 L116 76" fill="none" stroke="#ffe5ec" stroke-width="2.5" stroke-linecap="round"/>
-      <circle cx="116" cy="76" r="4" fill="#ff9eb3"/>
-      <text x="24" y="36" fill="#9fe0c6" font-size="8.5" font-weight="700" letter-spacing="1.5">ECONOMY</text>
-      <text x="24" y="56" fill="#ffffff" font-size="14" font-weight="800">데이터로 읽는</text>
-      <text x="24" y="74" fill="#ffd6de" font-size="14" font-weight="800">시장의 흐름</text>
-    `,
-    morningLeaf: `
-      <rect width="160" height="220" fill="#fff8f9"/>
-      <rect x="14" y="14" width="132" height="192" rx="8" fill="#eef9f4"/>
-      <circle cx="80" cy="135" r="42" fill="#ffd6de"/>
-      <path d="M80 165 L80 112" stroke="#2f8568" stroke-width="3" stroke-linecap="round"/>
-      <path d="M80 135 Q56 122 62 104 Q80 110 80 135 Z" fill="#46a382"/>
-      <path d="M80 124 Q104 110 98 92 Q80 100 80 124 Z" fill="#6ec4a4"/>
-      <text x="80" y="42" text-anchor="middle" fill="#2f8568" font-size="8.5" font-weight="700" letter-spacing="1.5">SELF-GROWTH</text>
-      <text x="80" y="64" text-anchor="middle" fill="#243b33" font-size="13.5" font-weight="800">작은 습관이 만드는</text>
-      <text x="80" y="82" text-anchor="middle" fill="#c7526c" font-size="13.5" font-weight="800">단단한 아침</text>
-    `,
-    starPost: `
-      <defs>
-        <linearGradient id="g5" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#2c4959"/>
-          <stop offset="100%" stop-color="#5d8b96"/>
-        </linearGradient>
-      </defs>
-      <rect width="160" height="220" fill="url(#g5)"/>
-      <circle cx="118" cy="48" r="14" fill="#ffe6ec"/>
-      <circle cx="36" cy="40" r="2" fill="#fff"/>
-      <circle cx="65" cy="28" r="1.5" fill="#ffd6de"/>
-      <circle cx="132" cy="84" r="2" fill="#bfead9"/>
-      <rect x="52" y="114" width="56" height="72" rx="28" fill="#ffd6de" opacity="0.92"/>
-      <rect x="64" y="136" width="32" height="22" rx="3" fill="#fff"/>
-      <path d="M64 136 L80 149 L96 136" fill="none" stroke="#e06d86" stroke-width="2"/>
-      <text x="80" y="74" text-anchor="middle" fill="#bfead9" font-size="13.5" font-weight="800">유리병 속의</text>
-      <text x="80" y="93" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="800">은하수 우체국</text>
-    `,
-    warmFlower: `
-      <rect width="160" height="220" fill="#ffe5eb"/>
-      <path d="M0 130 Q80 105 160 130 L160 220 L0 220 Z" fill="#d3f2e4"/>
-      <circle cx="80" cy="136" r="14" fill="#ff9eb3"/>
-      <circle cx="64" cy="126" r="12" fill="#fff7f9"/>
-      <circle cx="96" cy="126" r="12" fill="#fff7f9"/>
-      <circle cx="67" cy="148" r="12" fill="#fff7f9"/>
-      <circle cx="93" cy="148" r="12" fill="#fff7f9"/>
-      <circle cx="80" cy="136" r="9" fill="#ffd166"/>
-      <text x="80" y="42" text-anchor="middle" fill="#a8435a" font-size="8.5" font-weight="700" letter-spacing="2">ESSAY</text>
-      <text x="80" y="66" text-anchor="middle" fill="#3a2930" font-size="13.5" font-weight="800">다정한 사람은</text>
-      <text x="80" y="85" text-anchor="middle" fill="#3a2930" font-size="13.5" font-weight="800">결국 살아남는다</text>
-    `,
-    deskGrid: `
-      <rect width="160" height="220" fill="#e4f6ee"/>
-      <rect x="20" y="20" width="120" height="180" rx="10" fill="#ffffff"/>
-      <rect x="34" y="106" width="42" height="42" rx="6" fill="#bfead9"/>
-      <rect x="84" y="106" width="42" height="42" rx="6" fill="#ffd6de"/>
-      <rect x="34" y="155" width="92" height="26" rx="6" fill="#f2f7f4"/>
-      <circle cx="55" cy="127" r="8" fill="#2f8568"/>
-      <path d="M98 127 L104 133 L114 121" fill="none" stroke="#c7526c" stroke-width="2.5" stroke-linecap="round"/>
-      <text x="34" y="48" fill="#2f8568" font-size="8.5" font-weight="800">PLANNING NOTE</text>
-      <text x="34" y="70" fill="#243b33" font-size="13.5" font-weight="800">기획자의 책상 위</text>
-      <text x="34" y="88" fill="#c7526c" font-size="13.5" font-weight="800">첫 번째 노트</text>
-    `,
-    coinGrow: `
-      <defs>
-        <linearGradient id="g8" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#ffd6de"/>
-          <stop offset="100%" stop-color="#bfead9"/>
-        </linearGradient>
-      </defs>
-      <rect width="160" height="220" fill="url(#g8)"/>
-      <rect x="22" y="24" width="116" height="172" rx="12" fill="#ffffff" opacity="0.92"/>
-      <circle cx="80" cy="138" r="28" fill="#ffe9a8" stroke="#f0be49" stroke-width="2.5"/>
-      <text x="80" y="144" text-anchor="middle" fill="#9c6b12" font-size="18" font-weight="900">₩</text>
-      <path d="M52 168 L108 168" stroke="#8fd9be" stroke-width="4" stroke-linecap="round"/>
-      <text x="80" y="52" text-anchor="middle" fill="#2f8568" font-size="8.5" font-weight="800">FINANCE</text>
-      <text x="80" y="74" text-anchor="middle" fill="#243b33" font-size="13.5" font-weight="800">스무 살의 첫</text>
-      <text x="80" y="92" text-anchor="middle" fill="#b83b58" font-size="13.5" font-weight="800">재무제표와 투자</text>
-    `
-  };
+let category = "전체";
+let cart = [];
 
-  return `<svg class="book-cover-svg" viewBox="0 0 160 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${book.name} 표지">
-    ${designs[book.theme] || designs.mintCafe}
-    <rect x="0" y="0" width="9" height="220" fill="#000" opacity="0.08"/>
-    <text x="80" y="206" text-anchor="middle" fill="#263832" opacity="0.7" font-size="8" font-weight="700">${book.author}</text>
-  </svg>`;
-}
+function renderBooks() {
+  const grid = document.getElementById("book-grid");
+  const keyword = document.getElementById("search").value.toLowerCase();
 
-function renderHeroArts() {
-  const svgs = [
-    `<svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
-      <rect x="28" y="34" width="92" height="132" rx="8" transform="rotate(-7 28 34)" fill="#8fd9be"/>
-      <rect x="115" y="28" width="96" height="138" rx="8" transform="rotate(6 115 28)" fill="#ffb8c8"/>
-      <rect x="74" y="22" width="104" height="148" rx="10" fill="#ffffff"/>
-      <circle cx="126" cy="78" r="24" fill="#dff5ec"/>
-      <path d="M116 78 L124 86 L138 70" fill="none" stroke="#2f8568" stroke-width="4" stroke-linecap="round"/>
-      <rect x="96" y="114" width="60" height="8" rx="4" fill="#ffd6de"/>
-      <rect x="104" y="130" width="44" height="8" rx="4" fill="#bfead9"/>
-    </svg>`,
-    `<svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
-      <rect x="55" y="55" width="150" height="110" rx="16" fill="#ffffff"/>
-      <rect x="48" y="42" width="164" height="28" rx="8" fill="#ff9eb3"/>
-      <rect x="121" y="42" width="18" height="123" fill="#8fd9be"/>
-      <circle cx="130" cy="108" r="28" fill="#fff5f7" stroke="#ff9eb3" stroke-width="3"/>
-      <text x="130" y="114" text-anchor="middle" fill="#b83b58" font-size="14" font-weight="900">3,000P</text>
-    </svg>`,
-    `<svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
-      <rect x="35" y="122" width="38" height="44" rx="8" fill="#bfead9"/>
-      <rect x="83" y="98" width="38" height="68" rx="8" fill="#8fd9be"/>
-      <rect x="131" y="72" width="38" height="94" rx="8" fill="#ffb8c8"/>
-      <rect x="179" y="44" width="38" height="122" rx="8" fill="#e06d86"/>
-      <text x="54" y="114" text-anchor="middle" fill="#243b33" font-size="11" font-weight="800">1%</text>
-      <text x="102" y="90" text-anchor="middle" fill="#243b33" font-size="11" font-weight="800">3%</text>
-      <text x="150" y="64" text-anchor="middle" fill="#243b33" font-size="11" font-weight="800">5%</text>
-      <text x="198" y="36" text-anchor="middle" fill="#b83b58" font-size="12" font-weight="900">7%</text>
-    </svg>`,
-    `<svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="130" cy="100" r="68" fill="#ffffff" opacity="0.85"/>
-      <path d="M72 115 Q100 95 130 115 Q160 95 188 115 L188 145 Q160 125 130 145 Q100 125 72 145 Z" fill="#bfead9"/>
-      <circle cx="130" cy="74" r="18" fill="#ffb8c8"/>
-    </svg>`
-  ];
-  svgs.forEach((svg, idx) => {
-    const el = document.getElementById(`heroArt${idx}`);
-    if (el) el.innerHTML = svg;
+  const filtered = books.filter(book => {
+    const matchCategory =
+      category === "전체" || book.category === category;
+
+    const matchSearch =
+      book.title.toLowerCase().includes(keyword) ||
+      book.author.toLowerCase().includes(keyword);
+
+    return matchCategory && matchSearch;
   });
-}
 
-/* =========================================================
-   3. 상태 관리 (localStorage 기반 회원 · 포인트 · 장바구니 · 주문)
-   ========================================================= */
-let currentUser = JSON.parse(localStorage.getItem("bookly_user") || "null");
-let cart = JSON.parse(localStorage.getItem("bookly_cart") || "[]");
-let orders = JSON.parse(localStorage.getItem("bookly_orders") || "[]");
-let currentCategory = "전체";
+  grid.innerHTML = "";
 
-function formatWon(n) {
-  return n.toLocaleString("ko-KR") + "원";
-}
+  filtered.forEach(book => {
+    const index = books.indexOf(book);
 
-function getMemberGrade(spent = 0) {
-  let grade = memberGrades[0];
-  for (const g of memberGrades) {
-    if (spent >= g.minSpent) grade = g;
-  }
-  return grade;
-}
-
-function saveState() {
-  localStorage.setItem("bookly_user", JSON.stringify(currentUser));
-  localStorage.setItem("bookly_cart", JSON.stringify(cart));
-  localStorage.setItem("bookly_orders", JSON.stringify(orders));
-}
-
-/* =========================================================
-   4. 도서 목록 / 검색 / 필터 / 상세 모달
-   ========================================================= */
-function renderBooks(list = books) {
-  const grid = document.getElementById("bookGrid");
-  document.getElementById("bookCountLabel").textContent = `총 ${list.length}권`;
-
-  if (!list.length) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:44px 16px;color:var(--muted);background:#f9fcfa;border-radius:16px;">검색 또는 선택한 조건에 맞는 도서가 없어요.</div>`;
-    return;
-  }
-
-  grid.innerHTML = list.map(b => `
-    <article class="book">
-      ${b.badge ? `<span class="badge ${b.badge === '신간' || b.badge === '추천' ? 'mint' : ''}">${b.badge}</span>` : ""}
-      <div class="cover-wrap" onclick="openBookDetail(${b.id})">
-        ${createBookCoverSVG(b)}
-      </div>
-      <div class="book-info">
-        <div class="book-cat">${b.category} · 재고 ${b.stock}권</div>
-        <h3 onclick="openBookDetail(${b.id})">${b.name}</h3>
-        <div class="author">${b.author}</div>
-        <div class="rating">★ ${b.rating}</div>
-        <div class="buyrow">
-          <div class="price">${formatWon(b.price)} ${b.oldPrice ? `<del>${formatWon(b.oldPrice)}</del>` : ""}</div>
-          <button class="add" onclick="addToCart(${b.id})" aria-label="${b.name} 장바구니 담기">＋</button>
+    grid.innerHTML += `
+      <article class="book-card">
+        <div class="book-image">
+          <img
+            src="${book.image}"
+            alt="${book.title}"
+            loading="lazy"
+            onerror="this.style.display='none'; this.parentElement.style.background='#f1ece8';"
+          >
         </div>
-      </div>
-    </article>
-  `).join("");
-}
 
-function filterCategory(cat, btnEl) {
-  currentCategory = cat;
-  document.querySelectorAll("#categoryTabs .cat").forEach(btn => {
-    btn.classList.toggle("active", btn.textContent.includes(cat === "전체" ? "전체 도서" : cat));
+        <div class="book-info">
+          <div class="book-tag">${book.tag}</div>
+          <div class="book-title">${book.title}</div>
+          <div class="author">${book.author}</div>
+
+          <div class="price-row">
+            <span class="price">${book.price.toLocaleString()}원</span>
+            <button class="add-button"
+              onclick="addCart(${index})">
+              + 담기
+            </button>
+          </div>
+        </div>
+      </article>
+    `;
   });
-  const filtered = cat === "전체" ? books : books.filter(b => b.category === cat);
-  renderBooks(filtered);
-}
 
-function searchBooks() {
-  const q = document.getElementById("searchInput").value.trim().toLowerCase();
-  const filtered = books.filter(b =>
-    (b.name + b.author + b.category).toLowerCase().includes(q)
-  );
-  renderBooks(filtered);
-  document.getElementById("bestseller").scrollIntoView({ behavior: "smooth" });
-}
-document.getElementById("searchInput").addEventListener("keydown", e => {
-  if (e.key === "Enter") searchBooks();
-});
-
-function openBookDetail(id) {
-  const b = books.find(item => item.id === id);
-  if (!b) return;
-  const grade = getMemberGrade(currentUser ? currentUser.totalSpent : 0);
-  const expectedPoint = Math.floor(b.price * grade.rate);
-
-  document.getElementById("modalContent").innerHTML = `
-    <button class="close" onclick="closeModal()">×</button>
-    <span class="tier-badge" style="margin:0 0 8px">${b.category}</span>
-    <h2>${b.name}</h2>
-    <p>${b.author} · 남은 재고 ${b.stock}권</p>
-    <div class="detail-box">
-      <div style="flex-shrink:0">${createBookCoverSVG(b)}</div>
-      <div style="font-size:13px;line-height:1.7;color:#465951">
-        <p style="color:#263832;font-size:14px;margin-bottom:10px">${b.desc}</p>
-        <div>판매가: <b style="font-size:17px;color:var(--mint-deep)">${formatWon(b.price)}</b></div>
-        <div style="color:var(--pink-dark);font-weight:700;margin-top:4px">
-          ${currentUser ? `${grade.name} 등급(${grade.label}) 적립: +${expectedPoint.toLocaleString()}P` : `로그인 시 등급별 최대 7% 적립`}
-        </div>
-      </div>
-    </div>
-    <button class="submit" onclick="addToCart(${b.id});closeModal()">장바구니에 담기</button>
-  `;
-  document.getElementById("modalBack").classList.add("show");
-}
-
-/* =========================================================
-   5. 장바구니 (수량 변경 · 삭제 · 합계) & 체험 결제
-   ========================================================= */
-function addToCart(id) {
-  const book = books.find(b => b.id === id);
-  if (!book || book.stock <= 0) {
-    showToast("품절된 도서입니다.");
-    return;
+  if (filtered.length === 0) {
+    grid.innerHTML = '<p>검색 결과가 없습니다.</p>';
   }
-  const existing = cart.find(item => item.id === id);
+}
+
+function setCategory(value, button) {
+  category = value;
+
+  document.querySelectorAll(".category").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  button.classList.add("active");
+  renderBooks();
+}
+
+function addCart(index) {
+  const book = books[index];
+  const existing = cart.find(item => item.title === book.title);
+
   if (existing) {
-    if (existing.qty >= book.stock) {
-      showToast("남은 재고 수량까지만 담을 수 있어요.");
-      return;
-    }
-    existing.qty++;
+    existing.quantity++;
   } else {
-    cart.push({ id, qty: 1 });
+    cart.push({...book, quantity: 1});
   }
-  saveState();
-  updateUI();
-  showToast(`'${book.name}' 장바구니에 담았어요!`);
+
+  updateCart();
+  alert("장바구니에 담았습니다!");
 }
 
-function changeCartQty(id, delta) {
-  const item = cart.find(x => x.id === id);
-  const book = books.find(b => b.id === id);
-  if (!item || !book) return;
+function updateCart() {
+  const count = cart.reduce(
+    (sum, item) => sum + item.quantity, 0
+  );
 
-  item.qty += delta;
-  if (item.qty <= 0) {
-    cart = cart.filter(x => x.id !== id);
-  } else if (item.qty > book.stock) {
-    item.qty = book.stock;
-    showToast("최대 재고 수량입니다.");
-  }
-  saveState();
-  updateUI();
-  openCart();
-}
+  document.getElementById("cart-count").textContent = count;
 
-function removeCartItem(id) {
-  cart = cart.filter(x => x.id !== id);
-  saveState();
-  updateUI();
-  openCart();
-}
+  const container = document.getElementById("cart-items");
 
-function openCart() {
-  const subtotal = cart.reduce((sum, item) => {
-    const b = books.find(x => x.id === item.id);
-    return sum + (b ? b.price * item.qty : 0);
-  }, 0);
-
-  const grade = getMemberGrade(currentUser ? currentUser.totalSpent : 0);
-  const earnPoints = Math.floor(subtotal * grade.rate);
-  const availablePoints = currentUser ? currentUser.points : 0;
-
-  document.getElementById("modalContent").innerHTML = `
-    <button class="close" onclick="closeModal()">×</button>
-    <h2>🛒 장바구니</h2>
-    <p>수량을 조절하고 포인트를 사용해 체험 결제를 진행해보세요.</p>
-    ${cart.length ? cart.map(item => {
-      const b = books.find(x => x.id === item.id);
-      return `
-        <div class="cart-item">
-          <div style="flex:1">
-            <b>${b.name}</b><br>
-            <span style="color:var(--muted);font-size:12px">${formatWon(b.price)}</span>
-          </div>
-          <div class="qty-box">
-            <button onclick="changeCartQty(${b.id}, -1)">-</button>
-            <span>${item.qty}</span>
-            <button onclick="changeCartQty(${b.id}, 1)">+</button>
-            <button class="del-btn" onclick="removeCartItem(${b.id})">삭제</button>
-          </div>
-          <b style="min-width:74px;text-align:right">${formatWon(b.price * item.qty)}</b>
+  if (cart.length === 0) {
+    container.innerHTML = '<div class="empty">장바구니가 비어 있습니다.</div>';
+  } else {
+    container.innerHTML = cart.map((item, index) => `
+      <div class="cart-item">
+        <div>
+          <strong>${item.title}</strong><br>
+          ${item.quantity}권 · ${item.price.toLocaleString()}원
         </div>
-      `;
-    }).join("") : `<p style="text-align:center;padding:24px 0">장바구니가 비어 있어요.</p>`}
+        <button onclick="removeCart(${index})">삭제</button>
+      </div>
+    `).join("");
+  }
 
-    ${cart.length ? `
-      <div class="field" style="margin-top:14px">
-        <label>포인트 사용 (보유: ${availablePoints.toLocaleString()}P)</label>
-        <input id="usePointInput" type="number" min="0" max="${Math.min(availablePoints, subtotal)}" value="0" oninput="recalcCart(${subtotal}, ${grade.rate})">
-      </div>
-      <div class="cart-total">
-        <div><span>상품 합계</span><span>${formatWon(subtotal)}</span></div>
-        <div><span>포인트 할인</span><span id="discountPreview">-0원</span></div>
-        <div><span>예상 적립 (${grade.name} ${grade.label})</span><span id="earnPreview" style="color:var(--pink-dark)">+${earnPoints.toLocaleString()}P</span></div>
-        <div class="final"><span>최종 결제 예정액</span><span id="finalPayPreview">${formatWon(subtotal)}</span></div>
-      </div>
-      <button class="submit" onclick="checkout()">체험 결제하기 (주문 내역 저장)</button>
-    ` : ""}
-  `;
-  document.getElementById("modalBack").classList.add("show");
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity, 0
+  );
+
+  document.getElementById("cart-total").textContent =
+    "총 금액: " + total.toLocaleString() + "원";
 }
 
-function recalcCart(subtotal, rate) {
-  if (!currentUser) return;
-  const input = document.getElementById("usePointInput");
-  let useP = Math.max(0, Math.min(Number(input.value) || 0, currentUser.points, subtotal));
-  const finalPay = subtotal - useP;
-  const earn = Math.floor(finalPay * rate);
+function removeCart(index) {
+  cart.splice(index, 1);
+  updateCart();
+}
 
-  document.getElementById("discountPreview").textContent = `-${formatWon(useP)}`;
-  document.getElementById("finalPayPreview").textContent = formatWon(finalPay);
-  document.getElementById("earnPreview").textContent = `+${earn.toLocaleString()}P`;
+function toggleCart() {
+  document.getElementById("cart-panel").classList.toggle("show");
 }
 
 function checkout() {
-  if (!cart.length) return;
-  if (!currentUser) {
-    closeModal();
-    openModal("login");
-    showToast("로그인 후 주문할 수 있어요.");
+  if (cart.length === 0) {
+    alert("장바구니가 비어 있습니다.");
     return;
   }
 
-  const subtotal = cart.reduce((sum, item) => {
-    const b = books.find(x => x.id === item.id);
-    return sum + b.price * item.qty;
-  }, 0);
-
-  const input = document.getElementById("usePointInput");
-  const usedPoints = Math.max(0, Math.min(Number(input?.value) || 0, currentUser.points, subtotal));
-  const finalPay = subtotal - usedPoints;
-
-  const gradeBefore = getMemberGrade(currentUser.totalSpent);
-  const earnedPoints = Math.floor(finalPay * gradeBefore.rate);
-
-  // 재고 차감
-  cart.forEach(item => {
-    const b = books.find(x => x.id === item.id);
-    if (b) b.stock = Math.max(0, b.stock - item.qty);
-  });
-
-  // 주문 내역 저장
-  const orderRecord = {
-    orderId: "ORD-" + Date.now().toString().slice(-6),
-    userEmail: currentUser.email,
-    date: new Date().toLocaleString("ko-KR"),
-    items: cart.map(item => {
-      const b = books.find(x => x.id === item.id);
-      return `${b.name} (${item.qty}권)`;
-    }),
-    finalPay,
-    usedPoints,
-    earnedPoints
-  };
-  orders.unshift(orderRecord);
-
-  // 회원 포인트 & 누적 구매액 업데이트
-  currentUser.points = currentUser.points - usedPoints + earnedPoints;
-  currentUser.totalSpent += finalPay;
-
-  cart = [];
-  saveState();
-  renderBooks(currentCategory === "전체" ? books : books.filter(b => b.category === currentCategory));
-  updateUI();
-  closeModal();
-  showToast(`주문 완료! ${earnedPoints.toLocaleString()}P가 적립되었어요.`);
+  alert("현재는 쇼핑몰 디자인 및 장바구니 시연 버전입니다. 실제 결제는 아직 연결되지 않았습니다.");
 }
 
-/* =========================================================
-   6. 회원가입 · 로그인 · 마이페이지 (등급 4단계 + 주문내역)
-   ========================================================= */
-function openModal(type) {
-  const isSignup = type === "signup";
-  document.getElementById("modalContent").innerHTML = `
-    <button class="close" onclick="closeModal()">×</button>
-    <h2>${isSignup ? "🌱 북클리 회원가입" : "📖 북클리 로그인"}</h2>
-    <p>${isSignup ? "가입 즉시 웰컴 포인트 3,000P가 지급됩니다." : "이메일과 비밀번호를 입력해 로그인하세요."}</p>
-    <form onsubmit="submitAuth(event, '${type}')">
-      ${isSignup ? `<div class="field"><label>이름</label><input id="authName" required placeholder="예: 김민트"></div>` : ""}
-      <div class="field"><label>이메일</label><input id="authEmail" type="email" required placeholder="bookly@example.com"></div>
-      <div class="field"><label>비밀번호</label><input id="authPw" type="password" minlength="4" required placeholder="4자 이상 입력"></div>
-      <button class="submit" type="submit">${isSignup ? "가입하고 3,000P 받기" : "로그인하기"}</button>
-    </form>
-  `;
-  document.getElementById("modalBack").classList.add("show");
-}
-
-function submitAuth(e, type) {
-  e.preventDefault();
-  const email = document.getElementById("authEmail").value.trim();
-  if (type === "signup") {
-    const name = document.getElementById("authName").value.trim();
-    currentUser = {
-      name,
-      email,
-      points: 3000,
-      totalSpent: 0
-    };
-    showToast(`${name}님 환영합니다! 가입 축하 3,000P 지급 완료!`);
-  } else {
-    const savedName = currentUser && currentUser.email === email ? currentUser.name : email.split("@")[0];
-    currentUser = currentUser && currentUser.email === email
-      ? currentUser
-      : { name: savedName, email, points: 3000, totalSpent: 0 };
-    showToast(`${currentUser.name}님, 다시 오신 것을 환영해요!`);
-  }
-  saveState();
-  updateUI();
-  closeModal();
-}
-
-function logout() {
-  currentUser = null;
-  localStorage.removeItem("bookly_user");
-  updateUI();
-  showToast("로그아웃되었습니다.");
-}
-
-function openMyPage() {
-  const grade = getMemberGrade(currentUser ? currentUser.totalSpent : 0);
-  const myOrders = currentUser ? orders.filter(o => o.userEmail === currentUser.email) : [];
-
-  document.getElementById("modalContent").innerHTML = `
-    <button class="close" onclick="closeModal()">×</button>
-    <h2>🌸 마이페이지 & 회원 등급</h2>
-    ${currentUser ? `
-      <p><b>${currentUser.name}</b>님 (${currentUser.email})</p>
-      <div class="cart-total" style="margin-bottom:14px">
-        <div><span>현재 회원 등급</span><b style="color:var(--pink-dark)">${grade.name} 등급 (적립률 ${grade.label})</b></div>
-        <div><span>보유 포인트</span><b>${currentUser.points.toLocaleString()}P</b></div>
-        <div><span>누적 구매 금액</span><b>${formatWon(currentUser.totalSpent)}</b></div>
-      </div>
-    ` : `<p>로그인하시면 보유 포인트와 주문 내역을 확인할 수 있어요.</p>`}
-
-    <h3 style="font-size:14px;margin:12px 0 8px">📊 회원 등급 4단계 안내</h3>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;font-size:12px;margin-bottom:16px">
-      ${memberGrades.map(g => `
-        <div style="padding:8px 4px;border-radius:10px;border:1px solid ${currentUser && grade.level === g.level ? 'var(--pink-dark)' : 'var(--line)'};background:${currentUser && grade.level === g.level ? 'var(--pink-light)' : '#fff'}">
-          <b>${g.name}</b><br>
-          <span style="color:var(--mint-deep);font-weight:800">${g.label}</span><br>
-          <span style="font-size:10px;color:var(--muted)">${(g.minSpent/10000)}만원~</span>
-        </div>
-      `).join("")}
-    </div>
-
-    <h3 style="font-size:14px;margin:12px 0 8px">🧾 체험 주문 내역 (${myOrders.length}건)</h3>
-    ${myOrders.length ? myOrders.map(o => `
-      <div class="order-card">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <b>${o.orderId}</b>
-          <span style="color:var(--muted)">${o.date}</span>
-        </div>
-        <div>${o.items.join(", ")}</div>
-        <div style="margin-top:4px;color:var(--mint-deep);font-weight:700">
-          결제액 ${formatWon(o.finalPay)} (사용 -${o.usedPoints}P / 적립 +${o.earnedPoints}P)
-        </div>
-      </div>
-    `).join("") : `<p style="font-size:12px">아직 주문 내역이 없습니다.</p>`}
-  `;
-  document.getElementById("modalBack").classList.add("show");
-}
-
-function updateUI() {
-  const totalQty = cart.reduce((sum, x) => sum + x.qty, 0);
-  const headerBtns = document.getElementById("authHeaderBtns");
-  const loungeBtns = document.getElementById("loungeBtns");
-  const tierBadge = document.getElementById("memberTierBadge");
-  const welcomeText = document.getElementById("welcomeText");
-  const pointBalance = document.getElementById("pointBalance");
-
-  if (currentUser) {
-    const grade = getMemberGrade(currentUser.totalSpent);
-    headerBtns.innerHTML = `
-      <button onclick="openMyPage()">마이페이지 (${grade.name})</button>
-      <button onclick="logout()">로그아웃</button>
-      <button class="cart-btn" onclick="openCart()">🛒 ${totalQty}</button>
-    `;
-    loungeBtns.innerHTML = `
-      <button onclick="openMyPage()">마이페이지 · 주문내역</button>
-      <button class="pink-btn" onclick="logout()">로그아웃</button>
-    `;
-    tierBadge.textContent = `${grade.name} · ${grade.label} 적립`;
-    welcomeText.innerHTML = `<b>${currentUser.name}</b>님, 오늘도 따뜻한 독서 되세요!<br>결제 시 구매 금액의 <b>${grade.label}</b>가 포인트로 적립됩니다.`;
-    pointBalance.textContent = `${currentUser.points.toLocaleString()}P / ${formatWon(currentUser.totalSpent)}`;
-  } else {
-    headerBtns.innerHTML = `
-      <button onclick="openModal('login')">로그인</button>
-      <button class="signup" onclick="openModal('signup')">회원가입</button>
-      <button class="cart-btn" onclick="openCart()">🛒 ${totalQty}</button>
-    `;
-    loungeBtns.innerHTML = `
-      <button onclick="openModal('login')">로그인하기</button>
-      <button class="pink-btn" onclick="openModal('signup')">회원가입 (+3,000P)</button>
-    `;
-    tierBadge.textContent = "비회원";
-    welcomeText.innerHTML = `Bookly에 오신 것을 환영해요 :)<br>회원가입 시 <b>3,000P</b>를 바로 지급해 드립니다.`;
-    pointBalance.textContent = `0P / 0원`;
-  }
-}
-
-function closeModal() {
-  document.getElementById("modalBack").classList.remove("show");
-}
-
-/* =========================================================
-   7. 히어로 4장 6초 자동 슬라이드 & 토스트 알림
-   ========================================================= */
-let slideIndex = 0;
-function setSlide(i) {
-  const slides = document.querySelectorAll(".slide");
-  const dots = document.querySelectorAll(".dots button");
-  slideIndex = (i + slides.length) % slides.length;
-  slides.forEach((s, idx) => s.classList.toggle("active", idx === slideIndex));
-  dots.forEach((d, idx) => d.classList.toggle("on", idx === slideIndex));
-}
-function moveSlide(n) { setSlide(slideIndex + n); }
-setInterval(() => setSlide(slideIndex + 1), 6000);
-
-let toastTimer;
-function showToast(msg) {
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
-}
-
-// 초기 렌더링
-renderHeroArts();
 renderBooks();
-updateUI();
+updateCart();
+
 </script>
+
 </body>
 </html>
-<style>
-  .added-books { max-width: 1200px; margin: 64px auto; padding: 0 20px; font-family: inherit; color: #293b38; }
-  .added-books h2 { margin: 0 0 8px; font-size: clamp(24px, 3vw, 34px); }
-  .added-books .books-subtitle { margin: 0 0 28px; color: #84918d; font-size: 14px; }
-  .added-books-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; }
-  .added-book-card { min-width: 0; }
-  .added-book-cover { overflow: hidden; border-radius: 7px; background: #f3f0eb; box-shadow: 0 12px 26px rgba(40,55,50,.14); aspect-ratio: 3 / 4; }
-  .added-book-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
-  .added-book-info { padding: 13px 2px 0; }
-  .added-book-info h3 { margin: 0 0 6px; font-size: 16px; line-height: 1.5; font-weight: 650; }
-  .added-book-info p { margin: 0; color: #89928e; font-size: 13px; }
-  @media (max-width: 760px) { .added-books-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; } }
-</style>
-
-<section class="added-books">
-  <h2>오늘의 추천 도서</h2>
-  <p class="books-subtitle">마음에 오래 남을 문장과 새로운 영감을 만나보세요.</p>
-  <div class="added-books-grid">
-    <article class="added-book-card">
-      <div class="added-book-cover"><img src="images/mint-afternoon-bookstore.jpg" alt="민트빛 오후의 서점 표지"></div>
-      <div class="added-book-info"><h3>민트빛 오후의 서점</h3><p>서하윤 지음</p></div>
-    </article>
-    <article class="added-book-card">
-      <div class="added-book-cover"><img src="images/pink-sunset-sentences.jpg" alt="분홍 노을이 머무는 문장들 표지"></div>
-      <div class="added-book-info"><h3>분홍 노을이 머무는 문장들</h3><p>이지안 지음</p></div>
-    </article>
-    <article class="added-book-card">
-      <div class="added-book-cover"><img src="images/market-through-data.jpg" alt="데이터로 읽는 시장의 흐름 표지"></div>
-      <div class="added-book-info"><h3>데이터로 읽는 시장의 흐름</h3><p>박도현 지음</p></div>
-    </article>
-    <article class="added-book-card">
-      <div class="added-book-cover"><img src="images/small-habits-morning.jpg" alt="작은 습관이 만드는 단단한 아침 표지"></div>
-      <div class="added-book-info"><h3>작은 습관이 만드는 단단한 아침</h3><p>김나연 지음</p></div>
-    </article>
-    <article class="added-book-card">
-      <div class="added-book-cover"><img src="images/galaxy-post-office.jpg" alt="유리병 속의 은하수 우체국 표지"></div>
-      <div class="added-book-info"><h3>유리병 속의 은하수 우체국</h3><p>최유진 지음</p></div>
-    </article>
-    <article class="added-book-card">
-      <div class="added-book-cover"><img src="images/kind-people-survive.jpg" alt="다정한 사람은 결국 살아남는다 표지"></div>
-      <div class="added-book-info"><h3>다정한 사람은 결국 살아남는다</h3><p>정수빈 지음</p></div>
-    </article>
-    <article class="added-book-card">
-      <div class="added-book-cover"><img src="images/planner-first-notebook.jpg" alt="기획자의 책상 위 첫 번째 노트 표지"></div>
-      <div class="added-book-info"><h3>기획자의 책상 위 첫 번째 노트</h3><p>한승우 지음 · ★ 4.8 · 16,200원</p></div>
-    </article>
-    <article class="added-book-card">
-      <div class="added-book-cover"><img src="images/first-financial-statements-investing.jpg" alt="스무 살의 첫 재무제표와 투자 표지"></div>
-      <div class="added-book-info"><h3>스무 살의 첫 재무제표와 투자</h3><p>경제·경영 · 재고 24권</p></div>
-    </article>
-  </div>
-</section>
