@@ -692,5 +692,22 @@ updateCart();
 
 </script>
 
+<!-- Supabase 라이브러리 불러오기 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Supabase 프로젝트 연결 -->
+<script>
+  const { createClient } = window.supabase;
+
+  const db = createClient(
+    'https://nxokthzfubqsobyopcrw.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54b2t0aHpmdWJxc29ieW9wY3J3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzODA5MzEsImV4cCI6MjExMDk1NjkzMX0.DKXPHRHHDXNFsCntMf87vhVRypuBD43HV_N1-rA18WI'
+  );
+
+  console.log('Supabase 연결 준비 완료!');
+</script>
+</body>
+</html>
+
 </body>
 </html>
